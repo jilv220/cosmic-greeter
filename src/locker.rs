@@ -2,6 +2,7 @@
 // SPDX-License-Identifier: GPL-3.0-only
 
 use cosmic::app::{message, Command, Core, Settings};
+use cosmic::Theme;
 use cosmic::{
     executor,
     iced::{
@@ -19,6 +20,7 @@ use cosmic::{
     style, widget, Element,
 };
 use cosmic_config::CosmicConfigEntry;
+use std::sync::Arc;
 use std::{
     any::TypeId,
     collections::HashMap,
@@ -31,6 +33,8 @@ use std::{
 };
 use tokio::{sync::mpsc, task, time};
 use wayland_client::{protocol::wl_output::WlOutput, Proxy};
+
+use crate::theme::get_theme;
 
 pub fn main(current_user: pwd::Passwd) -> Result<(), Box<dyn std::error::Error>> {
     //TODO: use accountsservice
@@ -68,7 +72,9 @@ pub fn main(current_user: pwd::Passwd) -> Result<(), Box<dyn std::error::Error>>
         wallpapers,
     };
 
-    let settings = Settings::default().no_main_window(true);
+    let settings = Settings::default()
+        .theme(Theme::custom(Arc::new(get_theme())))
+        .no_main_window(true);
 
     cosmic::app::run::<App>(settings, flags)?;
 
