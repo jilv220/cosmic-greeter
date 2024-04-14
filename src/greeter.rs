@@ -265,7 +265,7 @@ pub fn main() -> Result<(), Box<dyn Error>> {
 
     let settings = Settings::default()
         .theme(Theme::custom(Arc::new(get_theme())))
-        .no_main_window(true);
+        .no_main_window(false);
 
     cosmic::app::run::<App>(settings, flags)?;
 
@@ -740,13 +740,8 @@ impl cosmic::Application for App {
         Command::none()
     }
 
-    // Not used for layer surface window
+    /// Switch to regular window to use with cage
     fn view(&self) -> Element<Self::Message> {
-        unimplemented!()
-    }
-
-    /// Creates a view after each update.
-    fn view_window(&self, surface_id: SurfaceId) -> Element<Self::Message> {
         let left_element = {
             let date_time_column = {
                 let mut column = widget::column::with_capacity(2).padding(16.0).spacing(12.0);
@@ -940,10 +935,6 @@ impl cosmic::Application for App {
                                             Some(value.clone()),
                                         ));
 
-                                if let Some(text_input_id) = self.text_input_ids.get(&surface_id) {
-                                    text_input = text_input.id(text_input_id.clone());
-                                }
-
                                 if *secret {
                                     text_input = text_input.password()
                                 }
@@ -1017,10 +1008,6 @@ impl cosmic::Application for App {
             .align_y(alignment::Vertical::Top)
             .style(cosmic::theme::Container::Transparent),
         )
-        .image(match self.surface_images.get(&surface_id) {
-            Some(some) => some.clone(),
-            None => self.flags.fallback_background.clone(),
-        })
         .content_fit(iced::ContentFit::Cover)
         .into()
     }

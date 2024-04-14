@@ -29,7 +29,6 @@ use std::{
     os::fd::OwnedFd,
     path::Path,
     process,
-    sync::Arc,
 };
 use tokio::{sync::mpsc, task, time};
 use wayland_client::{protocol::wl_output::WlOutput, Proxy};

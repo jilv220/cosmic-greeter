@@ -36,7 +36,7 @@ version = "0.9.0"
 features = ["sync-codec"]
 
 [features]
-default = ["logind", "networkmanager", "upower"]
+default = ["networkmanager", "upower"]
 logind = ["logind-zbus", "zbus"]
 networkmanager = ["cosmic-dbus-networkmanager", "zbus"]
 upower = ["upower_dbus", "zbus"]
